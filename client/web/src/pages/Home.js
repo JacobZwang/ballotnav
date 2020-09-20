@@ -1,23 +1,31 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+//import { useParams } from "react-router-dom";
 import "./Home.css";
 
 // npm module for resizing panels (should be replaced)
 import ResizablePanels from "resizable-panels-react";
 
-// temporary background image to represent map remove this and image file when real map put in
-import Background from "../assets/mapPlaceholder.png";
-
 // components
 import SidePanelList from "../components/SidePanelList";
+import SidePanelSelection from "../components/SidePanelSelection";
 import Mapbox from "../components/Mapbox";
 
 // png logo (svg rendered oddly)
 import Logo from "../assets/ballotnav-logo.png";
 
 function Home() {
-  const { id } = useParams();
-  const hasID = id !== undefined;
+  //const { id } = useParams();
+  //const hasID = id !== undefined;
+  const [showDetails, setShowDetails] = useState(false);
+  const [searchResultId, setSearchResultId] = useState(0);
+  function goToDetails(id) {
+    setShowDetails(true);
+    setSearchResultId(id);
+  }
+
+  function goToHome() {
+    setShowDetails(false);
+  }
   return (
     <div className="application">
       <ResizablePanels
@@ -39,19 +47,42 @@ function Home() {
                 className="ballotNavLogo"
               ></img>
             </a>
-            <h1>Volunteer</h1>
-            <h1>Press</h1>
-            {/* search bar placeholder */}
+            <a
+              href="https://www.hackforla.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="noDecoration"
+            >
+              <h2>volunteer</h2>
+            </a>
+            <a
+              href="https://www.ballotnav.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="noDecoration"
+            >
+              <h2>press</h2>
+            </a>
           </div>
           <div className="menu">
             <input></input>
-            <select>
+            {/* <select>
               <option value="english">English</option>
               <option value="spanish">Spanish</option>
-            </select>
+            </select> */}
+            <button className="searchButton">Search</button>
           </div>
-          {/* <SidePanelList /> */}
-          <SidePanelList />
+          {!showDetails ? (
+            <SidePanelList
+              goToDetails={goToDetails}
+              showDetails={showDetails}
+            />
+          ) : (
+            <SidePanelSelection
+              searchResultId={searchResultId}
+              goToHome={goToHome}
+            />
+          )}
         </div>
         {/* temporary image to represent map */}
         <Mapbox />
