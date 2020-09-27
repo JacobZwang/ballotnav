@@ -1,13 +1,13 @@
 FROM node:12
 
-COPY package*.json ./ballotnav/
+COPY package.json ./ballotnav/
+COPY package-lock.json ./ballotnav/
 
 WORKDIR /ballotnav
-RUN npm install
+RUN npm ci
 
 COPY . .
 
 EXPOSE 8080
 
-ENTRYPOINT ["./entrypoint.sh"]
-CMD [ "node", "app.js" ]
+CMD ["node", "app.js"]
